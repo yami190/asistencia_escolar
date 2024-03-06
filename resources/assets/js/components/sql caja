@@ -1,0 +1,36 @@
+SELECT t1.*
+FROM cuentas AS t1
+INNER JOIN(
+	SELECT cedula
+	FROM cuentas
+	GROUP BY cedula
+	HAVING COUNT(cedula) > 1
+)temp ON t1.cedula = temp.cedula
+order by cedula
+
+
+DELETE TablaDerivada from (SELECT t1.*
+FROM cuentas AS t1
+INNER JOIN(
+	SELECT cedula
+	FROM cuentas
+	GROUP BY cedula
+	HAVING COUNT(cedula) > 1
+)temp ON t1.cedula = temp.cedula
+order by cedula) as TablaDerivada WHERE ncuenta LIKE '0128%'
+
+INSERT INTO temp_cuenta (cedula, ncuenta, banco, condicion) SELECT t1.cedula, t1.ncuenta, t1.banco, t1.condicion
+FROM cuentas AS t1
+INNER JOIN(
+	SELECT cedula
+	FROM cuentas
+	GROUP BY cedula
+	HAVING COUNT(cedula) > 1
+)temp ON t1.cedula = temp.cedula WHERE t1.ncuenta like '0128%'
+order by cedula
+
+DELETE t1 FROM usuarios t1
+INNER JOIN usuarios t2 
+WHERE t1.id > t2.id AND t1.email = t2.email;
+
+4598013

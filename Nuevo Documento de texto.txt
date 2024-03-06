@@ -1,0 +1,7 @@
+SELECT Cedula, ncuenta, banco
+FROM cuentas_temp
+WHERE NOT EXISTS (
+    SELECT Cedula, ncuenta, banco
+    FROM cuentas
+    WHERE cuentas.Cedula = cuentas_temp.Cedula
+);
