@@ -14,7 +14,7 @@
                   <!-- text input -->
                     <div class="input-group input-group-sm">
                       <span class="input-group-append">
-                        <button type="button" class="btn btn-info btn-flat" @click="procesar()">Procesar</button>
+                        <button type="button" class="btn btn-info btn-flat" @click="procesar()">Grupo</button>
                       </span>
                     </div>
                 </div> 
@@ -84,6 +84,14 @@
                       </div>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label>Observacion</label>
+                        <input type="text" v-model="observacion" class="form-control">
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -121,6 +129,7 @@
                         <th>tipo</th>
                         <th>Fecha</th>
                         <th>Estatus</th> 
+                        <th>Observación</th> 
                       </tr>
                     </thead>
                     <tbody>
@@ -135,6 +144,7 @@
                         <td>{{ preta_temp.frecuencia }}</td>
                         <td>{{ preta_temp.fecha_registro }}</td>
                         <td>{{ preta_temp.estatus }}</td>
+                        <td>{{ preta_temp.observacion }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -167,6 +177,7 @@
                 descuento : '0.00',
                 cuotas : '12',
                 frecuencia: 'Quincenal',
+                observacion: '',
             }
         },
           created: function(){
@@ -231,6 +242,7 @@
                       descuento: this.descuento,
                       cuotas: this.cuotas,
                       frecuencia: this.frecuencia,
+                      observacion: this.observacion,
                 }).then(response => {
                     this.esperarTiempo();
                     this.listarPrestatemp();
@@ -241,6 +253,7 @@
                       this.descuento='0.00';
                       this.cuotas='12';
                       this.frecuencia='Quincenal';
+                      this.observacion='',
                      swal({
                         title: "!Mensaje del sistema!",
                         text: "El proceso fue ejecutado con exito!",

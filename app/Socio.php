@@ -9,6 +9,7 @@ class Socio extends Model
     protected $table = 'socios';
     protected $primaryKey = 'id_socio';
     protected $fillable = ['codigo','nombres', 'cedula', 'descripcion', 'condicion'];
+    public $timestamps = false;
 
     public function nominas(){
     	return $this->belongsTo('App\Nomina', 'codigo', 'codigo');

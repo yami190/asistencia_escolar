@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\carbon;
 use App\Presta_temp;
 use App\Socio;
-use Carbon\carbon;
+use App\Cuota;
 use DB;
 
 class PrestamosControler extends Controller
@@ -17,8 +18,10 @@ class PrestamosControler extends Controller
 
        $temp_presta = Presta_temp::leftjoin('socios','presta_temp.cedula','=','socios.cedula')
             ->leftjoin('nominas','socios.codigo','=','nominas.codigo')
-            ->select('presta_temp.id_prestamo','presta_temp.cedula', 'socios.nombres','nominas.nombre as nomina', 'presta_temp.monto', 'presta_temp.descuento', 'presta_temp.frecuencia', 'presta_temp.cuotas', 'presta_temp.fecha_registro', 'presta_temp.estatus')
-            ->orderBy('presta_temp.id_prestamo', 'ASC')->paginate(12);
+            ->select('presta_temp.id_prestamo','presta_temp.cedula', 'socios.nombres','nominas.nombre as nomina', 
+            'presta_temp.monto', 'presta_temp.descuento', 'presta_temp.frecuencia', 'presta_temp.cuotas', 
+            'presta_temp.fecha_registro', 'presta_temp.estatus', 'presta_temp.observacion')
+            ->orderBy('presta_temp.id_prestamo', 'desc')->paginate(12);
         
         return ['temp_presta' => $temp_presta];
 
@@ -34,7 +37,8 @@ class PrestamosControler extends Controller
             $socio = Socio::join('nominas','socios.codigo','=','nominas.codigo')
             ->join('movimientos','socios.cedula','=','movimientos.cedula')
             ->leftjoin('histo_presta','socios.cedula','=','histo_presta.cedula')
-            ->select('socios.cedula', 'socios.nombres','nominas.nombre as nomina','histo_presta.monto')
+            ->select('socios.cedula', 'socios.nombres','nominas.nombre as nomina',
+            'histo_presta.monto')
             ->where('socios.cedula', '=', $cedula)
             ->where('movimientos.ano', '=', $ano)
             ->take(1)->get();
@@ -44,8 +48,8 @@ class PrestamosControler extends Controller
     }
     public function store(Request $request)
     {
-        if (!$request->ajax()) return redirect('/');
-
+        //if (!$request->ajax()) return redirect('/');
+        
         $request->validate([
             'cedula' => 'required',
             'nombres' => 'required',
@@ -64,6 +68,7 @@ class PrestamosControler extends Controller
             $prestatemp->fecha_registro = $mytime->toDateString();
             $prestatemp->frecuencia = $request->frecuencia;
             $prestatemp->cuotas = $request->cuotas;
+            $prestatemp->observacion = $request->observacion;
 
             $prestatemp->save();     
     }

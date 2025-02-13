@@ -82,7 +82,7 @@ class MovimientosControlador extends Controller
 
      public function buscarsoocio(Request $request)
     {
-        //if(!$request->ajax()) return redirect('/');
+        if(!$request->ajax()) return redirect('/');
         $date = Carbon::now();
         $date = $date->format('Y');
 
@@ -91,8 +91,8 @@ class MovimientosControlador extends Controller
             $socioslista = Movimiento::join('mes', 'mes.id_mes', '=', 'movimientos.mes')
             ->select('movimientos.apor_ahorro','movimientos.apor_presta','movimientos.seguro','mes.mes','movimientos.ano')
             ->where('movimientos.cedula', $cedula)
-            ->where('movimientos.ano', 2024)
-            ->orderBy('id_movimiento', 'ASC')->paginate(12);
+            ->where('movimientos.ano', $date)
+            ->orderBy('mes.id_mes', 'ASC')->paginate(12);
         return [
             'socioslista' => $socioslista
         ];
@@ -119,19 +119,21 @@ class MovimientosControlador extends Controller
     public function historicosicio(Request $request)
     {
 
-        if(!$request->ajax()) return redirect('/');
+       if(!$request->ajax()) return redirect('/');
 
         $date = Carbon::now();
-        $date = $date->subYear();
+        $date = $date->subYear()->format('Y');
+
+       // return $date;
 
         $cedula = $request->cedula;
 
         $historico = Movimiento::join('mes', 'mes.id_mes', '=', 'movimientos.mes')
-        ->select('movimientos.id_movimiento','movimientos.apor_ahorro','movimientos.apor_presta','movimientos.seguro','mes.mes','movimientos.ano')
+        ->select('movimientos.apor_ahorro','movimientos.apor_presta','movimientos.seguro','mes.mes','movimientos.ano')
         ->where('movimientos.cedula', $cedula)
-        //->where('movimientos.ano', $date)
         ->whereBetween('movimientos.ano', [2019, $date])
-        ->orderBy('id_movimiento', 'desc')->paginate(12);
+        ->orderBy('movimientos.id_movimiento', 'desc')
+        ->paginate(12);
 
         return [
             'pagination' => [

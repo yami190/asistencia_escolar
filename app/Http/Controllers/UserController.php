@@ -12,16 +12,18 @@ class UserController extends Controller
        $buscar = $request->buscar;
         $criterio = $request->criterio;
 
+      
+
         if($buscar==''){
 
-            $users = User::select('users.id','users.name','users.cedula','users.password','users.condicion', 'users.descripcion','users.condicion', 'rol.nombre as rol')->where('users.condicion', '=', '1')
+            $users = User::select('users.id', 'users.nombres', 'users.cedula','users.telefono','users.correo','users.cargo', 'users.rol')
             ->orderBy('id', 'DESC')->paginate(10);
 
         }
 
         else {
 
-        	$users = User::select('users.id','users.name','users.cedula','users.password','users.condicion', 'users.descripcion','users.condicion', 'rol.nombre as rol')->where('users.condicion', '=', '1')
+        	$users = User::select('users.id', 'users.nombres', 'users.cedula','users.telefono','users.correo','users.cargo', 'users.rol')
             ->where('socios.'.$criterio, 'like', '%'. $buscar .'%')
             ->orderBy('id', 'DESC')->paginate(10);
 

@@ -22,6 +22,7 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
+Vue.component('login', require('./components/Login.vue').default);
 Vue.component('nomina', require('./components/Nomina.vue').default);
 Vue.component('movimiento', require('./components/Movimientos.vue').default);
 Vue.component('socio', require('./components/Socios.vue').default);
@@ -46,8 +47,11 @@ Vue.component('balancescaja', require('./components/BalancesCaja.vue').default);
 //Administrador
 Vue.component('nomin-socios', require('./components/Nomin_socios.vue').default);
 Vue.component('prueba', require('./components/pruebas.vue').default);
+Vue.component('asistencia', require('./components/Asistencia.vue').default);
 //Descuentos
 Vue.component('ajusfi', require('./components/AjusteFi.vue').default);
+//Cuotas
+Vue.component('cuotas', require('./components/Cuotas.vue').default);
 
 
 

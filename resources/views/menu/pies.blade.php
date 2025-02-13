@@ -1,39 +1,73 @@
-            </div>
-          </div>
-        </div>
-      </div>
-      <?php 
-        use Carbon\Carbon;
-        $date = Carbon::now();
-        $date = $date->format('Y');
-
-      ?>
-    </section>
-
   </div>
-<footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 4.8.2
+</div>
+ <!-- Footer -->
+ <footer class="content-footer footer bg-footer-theme">
+  <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+    <div class="mb-2 mb-md-0">
+      ©
+      <script>
+        document.write(new Date().getFullYear());
+      </script>
+      Creado por:
+      <a href="#" target="_blank" class="footer-link fw-bolder">Elismar Maestre</a>
     </div>
-    <strong>Copyright &copy; 2020-{{ $date}} <a href="#">Desarrollado por Freddy Salazar</a>.</strong> Todos los derechos reservados.
-  </footer>
+    <div>
+      <a href="#" class="footer-link me-4" target="_blank">License</a>
+      <!-- <a href="#" target="_blank" class="footer-link me-4">More Themes</a> -->
 
-  <aside class="control-sidebar control-sidebar-dark">
-  </aside>
+      <a
+        href="#"
+        target="_blank"
+        class="footer-link me-4"
+        >Documentation</a
+      >
+
+      <a
+        href="#"
+        target="_blank"
+        class="footer-link me-4"
+        >Support</a
+      >
+    </div>
+  </div>
+</footer>
+<!-- / Footer -->
+
+<div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
 </div>
 
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
 <script src="{{ asset('js/app.js') }}"></script>
-<script src="{{ asset('js/sweetalert.min.js') }}"></script>
-<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script src="assets/vendor/libs/jquery/jquery.js"></script>
+<script src="assets/vendor/libs/popper/popper.js"></script>
+<script src="assets/vendor/js/bootstrap.js"></script>
+<script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="assets/vendor/js/menu.js"></script>
+<!-- endbuild -->
 
+<!-- Vendors JS -->
+<script src="assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
-<!-- jQuery -->
-<script src="bt/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="bt/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="bt/dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="bt/dist/js/demo.js"></script>
+<!-- Main JS -->
+<script src="assets/js/main.js"></script>
+
+<!-- Page JS -->
+<script src="assets/js/dashboards-analytics.js"></script>
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>

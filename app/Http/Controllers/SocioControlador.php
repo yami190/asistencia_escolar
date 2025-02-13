@@ -52,26 +52,29 @@ class SocioControlador extends Controller
 
      public function store(Request $request)
     {
-
+     return $request;
     if(!$request->ajax()) return redirect('/');
         $socio = new Socio();
         $socio->codigo = $request->codigo;
         $socio->nombres = $request->nombres;
         $socio->cedula = $request->cedula;
         $socio->descripcion = $request->descripcion;
-        $socio->condicion = '1';
+        $socio->condicion = $request->condicion;
 
         $socio->save();
     }
 
  public function update(Request $request)
     {
+
+       // return $request;
         if(!$request->ajax()) return redirect('/');
-        $socio = Socio::findORFail($request->id_socio);
+        $socio = Socio::where('cedula', $request->cedula)->first();
+       // return $request;
         $socio->codigo = $request->codigo;
-        $socio->nombres = $request->nombre;
-        $socio->descripcion = $request->descripcion;
-        $socio->condicion = '1';
+        $socio->nombres = $request->nombres;
+       // $socio->descripcion = $request->descripcion;
+        $socio->condicion = $request->condicion;
 
         $socio->save();
         
@@ -118,6 +121,23 @@ class SocioControlador extends Controller
             ],
             'cuentasSocios' => $cuentasSocios
         ];
+    }
+
+    public function buscarSocio(Request $request)
+    {
+        // Sanitización del input (ejemplo para Laravel)
+        $cedula = $request->validate(['cedula' => 'required|integer']);
+
+        // Ejecución de la consulta con manejo de errores
+        $archivosocio = Socio::select('socios.id_socio', 'socios.cedula', 'socios.nombres', 'nominas.nombre as nomina', 'socios.condicion', 'socios.codigo')
+        ->join('nominas','socios.codigo','=','nominas.codigo')
+        ->where('cedula', $cedula)->take(1)->get();
+
+        if (!$archivosocio) {
+            return response()->json(['message' => 'archivosocio no encontrado'], 404);
+        }
+
+        return ['archivosocio' => $archivosocio];
     }
 
 

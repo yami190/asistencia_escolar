@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "numeral": "^2.0.6",
+        "sweetalert2": "^11.14.4",
         "vue-infinite-scroll": "^2.0.2",
         "vx-easyui": "^1.2.39"
     }

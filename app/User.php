@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id','name', 'cedula', 'password','condicion','id_rol'
+        'id','name', 'cedula', 'clave','telefono','correo','cargo','id_rol'
     ];
 
     /**
@@ -25,10 +25,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+         'remember_token',
     ];
+    public $timestamps = false;
 
-    public function rol(){
-        return $this->belongsTo('App\Rol')
-    }
+    
 }
