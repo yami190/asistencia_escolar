@@ -8,6 +8,6 @@ class Asistencia extends Model
 {
     protected $table = 'asistencias';
     protected $primaryKey = 'id_asistencia';
-    protected $fillable = ['id_alumno', 'fecha','asistio'];
+    protected $fillable = ['id_alumno', 'id_personal','fecha','asistio'];
     public $timestamps = false;
 }

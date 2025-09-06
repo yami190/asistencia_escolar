@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "axios": "^0.27.2",
-        "bootstrap": "^4.1.0",
+        "bootstrap": "^4.6.2",
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^4.0.7",
@@ -24,6 +24,10 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "@fullcalendar/core": "^6.1.17",
+        "@fullcalendar/daygrid": "^6.1.17",
+        "@fullcalendar/interaction": "^6.1.17",
+        "@fullcalendar/vue": "^6.1.17",
         "numeral": "^2.0.6",
         "sweetalert2": "^11.14.4",
         "vue-infinite-scroll": "^2.0.2",

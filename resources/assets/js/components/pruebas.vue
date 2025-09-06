@@ -35,6 +35,7 @@
               class="btn rounded-pill btn-outline-success"
               data-bs-toggle="modal"
               data-bs-target="#basicModal"
+              @click="limpiarFormulario()"
             >
                 Nuevo Usuario
             </button>
@@ -54,46 +55,132 @@
                     <div class="row g-2">
                       <div class="col mb-3">
                         <label for="nombres" class="form-label">Nombres y Apellidos</label>
-                        <input type="text" id="nombres" class="form-control" v-model="nombres"autocomplete="off"/>
+                        <input 
+                          type="text" 
+                          id="nombres" 
+                          class="form-control" 
+                          v-model="nombres"
+                          autocomplete="off" 
+                          @keypress="soloLetras"
+                          @input="validarTexto('nombres')"
+                        />
                       </div>
                       <div class="col mb-3">
-                        <label for="cedula" class="form-label">Cedula</label>
-                        <input type="text" id="cedula" class="form-control" v-model="cedula" autocomplete="off">
+                        <label for="cedula" class="form-label">Cédula</label>
+                        <input 
+                          type="text" 
+                          id="cedula" 
+                          class="form-control" 
+                          v-model="cedula" 
+                          autocomplete="off"
+                          @keypress="soloNumeros"
+                          @input="validarNumero('cedula')"
+                        >
                       </div>
                       <div class="col mb-3">
-                        <label for="telefono" class="form-label">Telefono</label>
-                        <input type="text" id="telefono" class="form-control" v-model="telefono" autocomplete="off"/>
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <input 
+                          type="text" 
+                          id="telefono" 
+                          class="form-control" 
+                          v-model="telefono" 
+                          autocomplete="off"
+                          @keypress="soloNumeros"
+                          @input="validarNumero('telefono')"
+                        />
                       </div>
                     </div>
                     <div class="row g-2">
                       <div class="col mb-3">
                         <label for="correo" class="form-label">Correo</label>
-                        <input type="text" id="correo" class="form-control" v-model="correo" autocomplete="off">
+                        <input 
+                          type="email" 
+                          id="correo" 
+                          class="form-control" 
+                          v-model="correo" 
+                          autocomplete="off"
+                          
+                        >
                       </div>
                       <div class="col mb-3">
                         <label for="cargo" class="form-label">Cargo</label>
-                        <input type="text" id="cargo" class="form-control" v-model="cargo" autocomplete="off"/>
+                        <input 
+                          type="text" 
+                          id="cargo" 
+                          class="form-control" 
+                          v-model="cargo" 
+                          autocomplete="off"
+                          @input="validarTexto('cargo')"
+                        />
                       </div>
                       <div class="col mb-3">
                         <label for="rol" class="form-label">Niveles de usuario</label>
-                        <select class="form-control" v-model="id_rol" >
-                          <option v-for="rol in arrayRoles" :key="rol.id_rol" :value="rol.id_rol" > {{ rol.descripcion }}</option>
-                      </select>
+                        <select class="form-control" v-model="id_rol">
+                          <option v-for="rol in arrayRoles" :key="rol.id_rol" :value="rol.id_rol" >{{ rol.descripcion }}</option>
+                        </select>
                       </div>
                     </div>
                     <div class="row g-2">
+                      <div class="row g-2">
+                                       
+                        <div class="col mb-3">
+                        <label for="respuesta1" class="form-label">¿En qué ciudad naciste?</label>
+                        <input 
+                            type="password" 
+                            id="respuesta1" 
+                            class="form-control" 
+                            v-model="respuesta1" 
+                            autocomplete="off"
+                        >
+                        </div>
+                        <div class="col mb-3">
+                        <label for="respuesta2" class="form-label">¿Cuál es tu comida favorita?</label>
+                        <input 
+                            type="password" 
+                            id="respuesta2" 
+                            class="form-control" 
+                            v-model="respuesta2" 
+                            autocomplete="off"
+                        >
+                        </div>
+                        <div class="col mb-3">
+                        <label for="respuesta3" class="form-label">¿En qué mes naciste?</label>
+                        <input 
+                            type="password" 
+                            id="respuesta3" 
+                            class="form-control" 
+                            v-model="respuesta3" 
+                            autocomplete="off"
+                        >
+                        </div>
+                    </div>
                       <div class="col mb-3">
-                        <label for="clave" class="form-label">Contraseña</label>
-                        <input type="password" id="clave" class="form-control" v-model="clave" autocomplete="off">
+                        <!-- Contraseña oculto -->
+                        <input type="hidden" id="clave" class="form-control" autocomplete="off">
                       </div>
-                      <div class="col mb-3">
-                        <!-- <label for="clave" class="form-label">Contraseña</label> -->
-                        <input type="hidden" id="clave" class="form-control"  autocomplete="off">
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="clave" class="form-label">Contraseña</label>
+                          <input 
+                            type="password" 
+                            id="clave" 
+                            class="form-control" 
+                            v-model="clave" 
+                            autocomplete="off"
+                          >
+                        </div>
+                        <div class="col mb-3">
+                          <label for="confirmar_clave" class="form-label">Confirmar Contraseña</label>
+                          <input 
+                            type="password" 
+                            id="confirmar_clave" 
+                            class="form-control" 
+                            v-model="confirmar_clave" 
+                            autocomplete="off"
+                          >
+                        </div>
                       </div>
-                      <div class="col mb-3">
-                        <!-- <label for="clave" class="form-label">Contraseña</label> -->
-                        <input type="hidden" id="clave" class="form-control"  autocomplete="off">
-                      </div>
+
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -105,6 +192,7 @@
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -174,58 +262,144 @@
                     <button
                       type="button"
                       class="btn-close"
-                      data-dismiss="modal"
+                      data-bs-dismiss="modal"
                       aria-label="Close"
-                    ></button>
+                      @click="limpiarFormulario()"></button>
                   </div>
                   <div class="modal-body">
                     <div class="row g-2">
                       <div class="col mb-3">
                         <label for="nombres" class="form-label">Nombres y Apellidos</label>
-                        <input type="text" id="nombres" class="form-control" v-model="nombres"autocomplete="off"/>
+                        <input 
+                          type="text" 
+                          id="nombres" 
+                          class="form-control" 
+                          v-model="nombres"
+                          autocomplete="off" 
+                          @keypress="soloLetras"
+                          @input="validarTexto('nombres')"
+                        />
                       </div>
                       <div class="col mb-3">
-                        <label for="cedula" class="form-label">Cedula</label>
-                        <input type="text" id="cedula" class="form-control" v-model="cedula" autocomplete="off">
+                        <label for="cedula" class="form-label">Cédula</label>
+                        <input 
+                          type="text" 
+                          id="cedula" 
+                          class="form-control" 
+                          v-model="cedula" 
+                          autocomplete="off"
+                          @keypress="soloNumeros"
+                          @input="validarNumero('cedula')"
+                        >
                       </div>
                       <div class="col mb-3">
-                        <label for="telefono" class="form-label">Telefono</label>
-                        <input type="text" id="telefono" class="form-control" v-model="telefono" autocomplete="off"/>
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <input 
+                          type="text" 
+                          id="telefono" 
+                          class="form-control" 
+                          v-model="telefono" 
+                          autocomplete="off"
+                          @keypress="soloNumeros"
+                          @input="validarNumero('telefono')"
+                        />
                       </div>
                     </div>
                     <div class="row g-2">
                       <div class="col mb-3">
                         <label for="correo" class="form-label">Correo</label>
-                        <input type="text" id="correo" class="form-control" v-model="correo" autocomplete="off">
+                        <input 
+                          type="email" 
+                          id="correo" 
+                          class="form-control" 
+                          v-model="correo" 
+                          autocomplete="off"
+                          
+                        >
                       </div>
                       <div class="col mb-3">
                         <label for="cargo" class="form-label">Cargo</label>
-                        <input type="text" id="cargo" class="form-control" v-model="cargo" autocomplete="off"/>
+                        <input 
+                          type="text" 
+                          id="cargo" 
+                          class="form-control" 
+                          v-model="cargo" 
+                          autocomplete="off"
+                          @input="validarTexto('cargo')"
+                        />
                       </div>
                       <div class="col mb-3">
                         <label for="rol" class="form-label">Niveles de usuario</label>
-                        <select class="form-control" v-model="id_rol" >
-                          <option v-for="rol in arrayRoles" :key="rol.id_rol" :value="rol.id_rol" > {{ rol.descripcion }}</option>
-                      </select>
+                        <select class="form-control" v-model="id_rol">
+                          <option v-for="rol in arrayRoles" :key="rol.id_rol" :value="rol.id_rol" >{{ rol.descripcion }}</option>
+                        </select>
                       </div>
                     </div>
                     <div class="row g-2">
+                      <div class="row g-2">
+                                       
+                        <div class="col mb-3">
+                        <label for="respuesta1" class="form-label">¿En qué ciudad naciste?</label>
+                        <input 
+                            type="password" 
+                            id="respuesta1" 
+                            class="form-control" 
+                            v-model="respuesta1" 
+                            autocomplete="off"
+                        >
+                        </div>
+                        <div class="col mb-3">
+                        <label for="respuesta2" class="form-label">¿Cuál es tu comida favorita?</label>
+                        <input 
+                            type="password" 
+                            id="respuesta2" 
+                            class="form-control" 
+                            v-model="respuesta2" 
+                            autocomplete="off"
+                        >
+                        </div>
+                        <div class="col mb-3">
+                        <label for="respuesta3" class="form-label">¿En qué mes naciste?</label>
+                        <input 
+                            type="password" 
+                            id="respuesta3" 
+                            class="form-control" 
+                            v-model="respuesta3" 
+                            autocomplete="off"
+                        >
+                        </div>
+                    </div>
                       <div class="col mb-3">
-                        <label for="clave" class="form-label">Contraseña</label>
-                        <input type="password" id="clave" class="form-control" v-model="clave" autocomplete="off">
+                        <!-- Contraseña oculto -->
+                        <input type="hidden" id="clave" class="form-control" autocomplete="off">
                       </div>
-                      <div class="col mb-3">
-                        <!-- <label for="clave" class="form-label">Contraseña</label> -->
-                        <input type="hidden" id="clave" class="form-control"  autocomplete="off">
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="clave" class="form-label">Contraseña</label>
+                          <input 
+                            type="password" 
+                            id="clave" 
+                            class="form-control" 
+                            v-model="clave" 
+                            autocomplete="off"
+                          >
+                        </div>
+                        <div class="col mb-3">
+                          <label for="confirmar_clave" class="form-label">Confirmar Contraseña</label>
+                          <input 
+                            type="password" 
+                            id="confirmar_clave" 
+                            class="form-control" 
+                            v-model="confirmar_clave" 
+                            autocomplete="off"
+                          >
+                        </div>
                       </div>
-                      <div class="col mb-3">
-                        <!-- <label for="clave" class="form-label">Contraseña</label> -->
-                        <input type="hidden" id="clave" class="form-control"  autocomplete="off">
-                      </div>
+
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn rounded-pill btn-outline-secondary" data-dismiss="modal" @click="limpiarFormulario()">
+                    <button type="button" class="btn rounded-pill btn-outline-secondary" data-bs-dismiss="modal" @click="limpiarFormulario()">
                       Close
                     </button>
                     <button type="button" class="btn rounded-pill btn-outline-success" @click="editarUsuario()">Editar</button>
@@ -261,199 +435,123 @@
 </template>
 
 <script>
-  
-  import axios from 'axios'
- 
-  
+import axios from 'axios'
+
 export default {
-    data() {
-        return {
-            arrayUsuarios: [],
-            arrrayusuarios: [],
-            arrayUser:[],
-            isLoad: false,
-            id:'',
-            buscar:'',
-            cedula : '',
-            nombres : '',
-            telefono : '',
-            sexo : '',
-            id_rol: '',
-            cargo: '',
-            correo: '',
-            clave: '',
-            arrayRoles: '',
-            pagination: {
-                      'total' : 0,
-                      'current_page' : 0,
-                      'per_page' : 0,
-                      'last_page' : 0,
-                      'from' : 0,
-                      'to' : 0,
-                  },
-            cedula : '',
-        }
+  data() {
+  return {
+    arrayUsuarios: [],
+    arrayUser: [],
+    isLoad: false,
+    id: '',
+    buscar: '',
+    cedula: '',
+    nombres: '',
+    telefono: '',
+    sexo: '',
+    id_rol: '',
+    cargo: '',
+    correo: '',
+    clave: '',
+    confirmar_clave: '',
+    arrayRoles: [],
+    respuesta1: "",
+    respuesta2: "",
+    respuesta3: "",
+    msg: '',               // Mensaje general de error o éxito
+    errorClave: '',        // Mensaje específico para error en contraseñas
+    pagination: {
+      total: 0,
+      current_page: 0,
+      per_page: 0,
+      last_page: 0,
+      from: 0,
+      to: 0
+    }
+  }
+},
+
+  computed: {
+    isActived() {
+      return this.pagination.current_page;
     },
-    computed:{
-          isActived: function(){
-              return this.pagination.current_page;
-          },
-          //Calcula los elementos de la pagination
-          pagesNumber: function() {
-              if(!this.pagination.to){
-                  return [];
-              }
+    pagesNumber() {
+      if (!this.pagination.to) return [];
 
-              var from = this.pagination.current_page - this.offset;
-              if(from < 1){
-                  from = 1;
-              }
+      let from = this.pagination.current_page - this.offset;
+      from = from < 1 ? 1 : from;
 
-              var to = from + (this.offset * 2);
-              if(to >= this.pagination.last_page){
-                  to = this.pagination.last_page;
-              }
+      let to = from + (this.offset * 2);
+      to = to >= this.pagination.last_page ? this.pagination.last_page : to;
 
-              var pagesArray = [];
-              while(from <= to) {
-                  pagesArray.push(from);
-                  from++;
-              }
-              return pagesArray;
-          }
-      },
-      created: function(){
-            this.ListarUsuarios(1,this.buscar);
-            this.selectRol();
-            
-        },
-        methods: {
-          ListarUsuarios (page,buscar){
-              let me=this;
-              var url= 'Lusuario?page=' + page + '&buscar=' + buscar;
-              axios.get(url).then(response => {
-                  //console.log(response);
-                  var respuesta = response.data;
-                  me.arrayUsuarios = respuesta.user.data;
-                  me.pagination = respuesta.pagination;
-                  })
-                  .catch(function (error) {
-                  console.log(error);
-                  });
-          },
-          cambiarPagina(page,buscar){
-              let me = this;
-              //Actualiza la Pagina Actual
-              me.pagination.current_page = page; 
-              //Enviar la peticion para visualizar la data de esa pagina 
-              me.ListarUsuarios(page,buscar);
-          },
-          registarUsuario() {
-             // Validación de campos
-             const camposRequeridos = {
-                cedula: 'El campo "Cédula" es requerido',
-                nombres: 'El campo "Nombres" es requerido',
-                telefono: 'El campo "Teléfono" es requerido',
-                id_rol: 'El campo "Rol" es requerido',
-                cargo: 'El campo "Cargo" es requerido',
-                correo: 'El campo "Correo" es requerido',
-              };
-
-            // Buscar el primer campo vacío
-            this.msg = '';
-            for (const campo in camposRequeridos) {
-              if (!this[campo]) {
-                this.msg = camposRequeridos[campo];
-                break;
-              }
-            }
-
-      // Mostrar mensaje de error si hay campos vacíos
-      if (this.msg) {
-        this.mostrarError(this.msg);
-        return; // Detener la ejecución si hay errores
+      let pagesArray = [];
+      while (from <= to) {
+        pagesArray.push(from);
+        from++;
       }
-      axios.post('Gusuario', {
-                'cedula': this.cedula,
-                'nombres': this.nombres,
-                'telefono': this.telefono,
-                'id_rol': this.id_rol,
-                'cargo': this.cargo,
-                'correo': this.correo,
-                'clave': this.clave,
-            }).then(response => {
-                this.mostrarExito("Usuario editado correctamente.");
-                this.limpiarFormulario();
-                this.ListarUsuarios(1, this.buscar);
-         
-            }).catch(function (error) {
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: error.message,
-                didOpen: () => {
-                  const swalContainer = document.querySelector('.swal2-container');
-                  if (swalContainer) {
-                    swalContainer.style.zIndex = '9999'; // Cambia este valor según sea necesario
-                  }
-                }
-                //footer: '<a href="#">Why do I have this issue?</a>'
-              });
-                //me.showToast('Oops...', 'Mensaje: ' + error.message, 'bg-danger');
-            });
-          },
-          mostar(id){
-            this.id = id;
-            let me=this;
-            //alert(id)
-          var url= 'Bususuario?id=' + me.id;
-        
-          axios.get(url).then(function (response){
-              var respuesta = response.data;
-              me.arrayUser = respuesta.user;
-              if (me.arrayUser.length>0){
-                
-                  me.id = me.arrayUser[0]['id'];
-                  me.cedula = me.arrayUser[0]['cedula'];
-                  me.nombres = me.arrayUser[0]['nombres'];
-                  me.telefono = me.arrayUser[0]['telefono'];
-                  me.id_rol = me.arrayUser[0]['id_rol'];
-                  me.cargo = me.arrayUser[0]['cargo'];
-                  me.correo = me.arrayUser[0]['correo'];
-              }
-              else{
-                  /// alert(me.cedula)
-              if (nombres == null ) {
-                  swal("Socio No se encuentra registrado");
+      return pagesArray;
+    }
+  },
+  created() {
+    this.ListarUsuarios(1, this.buscar);
+    this.selectRol();
+  },
+  methods: {
+    soloNumeros(event) {
+      if (!/[0-9]/.test(event.key)) {
+        event.preventDefault();
+      }
+    },
+    validarNumero(campo) {
+      this[campo] = this[campo].replace(/\D/g, "");
+    },
+    soloLetras(event) {
+      if (!/^[a-zA-Z\s]+$/.test(event.key)) {
+        event.preventDefault();
+      }
+    },
+    validarTexto(campo) {
+      this[campo] = this[campo].replace(/[^a-zA-Z\s]/g, "");
+    },
+    validarCorreo() {
+      const correoRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!correoRegex.test(this.correo)) {
+        console.log("Correo no válido");
+      }
+    },
+    ListarUsuarios(page, buscar) {
+      let me = this;
+      const url = `Lusuario?page=${page}&buscar=${buscar}`;
+      axios.get(url)
+        .then(response => {
+          const respuesta = response.data;
+          me.arrayUsuarios = respuesta.user.data;
+          me.pagination = respuesta.pagination;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    cambiarPagina(page, buscar) {
+      this.pagination.current_page = page;
+      this.ListarUsuarios(page, buscar);
+    },
+    registarUsuario() {
+      
+      const camposRequeridos = {
+        cedula: 'El campo "Cédula" es requerido',
+        nombres: 'El campo "Nombres" es requerido',
+        telefono: 'El campo "Teléfono" es requerido',
+        id_rol: 'El campo "Rol" es requerido',
+        cargo: 'El campo "Cargo" es requerido',
+        correo: 'El campo "Correo" es requerido',
+        clave: 'El campo "Contraseña" es requerido',
+        confirmar_clave: 'El campo "Confirmar Contraseña" es requerido',
+        respuesta1: 'El campo "¿En qué ciudad naciste?" es requerido',
+        respuesta2: 'El campo "¿Cuál es tu comida favorita?" es requerido',
+        respuesta3: 'El campo "¿En qué mes naciste?" es requerido'
+      };
 
-                  me.nombres='';
-                  me.apellidos='';
-                  me.nombres='';
-                  
-              }
-              
-              }
-          })
-          .catch(function (error) {
-              console.log(error);
-          });
-          const modalElement = document.getElementById('miModal');
-          const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-            
-          },
-          editarUsuario() {
-              // Validación de campos
-              const camposRequeridos = {
-                cedula: 'El campo "Cédula" es requerido',
-                nombres: 'El campo "Nombres" es requerido',
-                telefono: 'El campo "Teléfono" es requerido',
-                id_rol: 'El campo "Rol" es requerido',
-                cargo: 'El campo "Cargo" es requerido',
-                correo: 'El campo "Correo" es requerido',
-              };
-
-      // Buscar el primer campo vacío
       this.msg = '';
       for (const campo in camposRequeridos) {
         if (!this[campo]) {
@@ -462,15 +560,18 @@ export default {
         }
       }
 
-      // Mostrar mensaje de error si hay campos vacíos
       if (this.msg) {
         this.mostrarError(this.msg);
-        return; // Detener la ejecución si hay errores
+        return;
       }
 
-      // Enviar datos al servidor
-      axios.post('Eusuario', {
-        id: this.id,
+      // Validar que las contraseñas coincidan
+      if (this.clave !== this.confirmar_clave) {
+        this.mostrarError('Las contraseñas no coinciden');
+        return;
+      }
+
+      axios.post('Gusuario', {
         cedula: this.cedula,
         nombres: this.nombres,
         telefono: this.telefono,
@@ -478,116 +579,214 @@ export default {
         cargo: this.cargo,
         correo: this.correo,
         clave: this.clave,
-      })
-      .then(response => {
-
-        this.mostrarExito("Usuario editado correctamente.");
+        confirmar_clave: this.confirmar_clave,
+        respuesta1: this.respuesta1,
+        respuesta2: this.respuesta2,
+        respuesta3: this.respuesta3
+      }).then(response => {
+        this.mostrarExito("Usuario registrado correctamente.");
         this.limpiarFormulario();
         this.ListarUsuarios(1, this.buscar);
-        this.cerrarModal();
-        
-      })
-      .catch(error => {
-        // Mostrar mensaje de error
-        this.mostrarError(error.message || "Ocurrió un error al editar el usuario.");
+      }).catch(error => {
+        if (error.response && error.response.status === 422) {
+          // Laravel devolvió errores de validación
+          const errores = error.response.data.errors;
+          const primerCampo = Object.keys(errores)[0];
+          this.mostrarError(errores[primerCampo][0]);
+        } else {
+          this.mostrarError(error.message || "Ocurrió un error al registrar el usuario.");
+        }
       });
-          },
-          mostrarError(mensaje) {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: mensaje,
-              didOpen: () => {
-                const swalContainer = document.querySelector('.swal2-container');
-                if (swalContainer) {
-                  swalContainer.style.zIndex = '9999'; // Cambia este valor según sea necesario
-                }
-              }
-            });
-          },
-          mostrarExito(mensaje) {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: mensaje,
-              showConfirmButton: false,
-              timer: 1500,
-              didOpen: () => {
-                const swalContainer = document.querySelector('.swal2-container');
-                if (swalContainer) {
-                  swalContainer.style.zIndex = '9999'; // Cambia este valor según sea necesario
-                }
-              }
-            });
-            
-          },
-          limpiarFormulario() {
-            this.id = '';
-            this.cedula = '';
-            this.nombres = '';
-            this.telefono = '';
-            this.id_rol = '';
-            this.cargo = '';
-            this.correo = '';
-            this.clave = '';
-          },
-          cerrarModal() {
-            // Cerrar el modal usando jQuery
-            $('#editmodal').modal('hide');
-          },
-          eliminar(id) {
-          Swal.fire({
-            title: "¿Estas seguro?",
-            text: "¡No podrás revertir esto!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "¡Sí, bórralo!"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Realiza la solicitud de eliminación usando Axios
-              axios.get('ELusuario', {
-                params: {
-                  id: id
-                }
-              })
-              .then(response => {
-                // Muestra un mensaje de éxito
-                Swal.fire({
-                  title: "¡Eliminado!",
-                  text: "Su archivo ha sido eliminado.",
-                  icon: "success"
-                });
+    },
 
-                // Llama al método para actualizar la lista de usuarios
-                this.ListarUsuarios(1, this.buscar);
-              })
-              .catch(error => {
-                console.error(error);
-                // Muestra un mensaje de error
-                Swal.fire({
-                  title: "Error!",
-                  text: "There was an error deleting the file.",
-                  icon: "error"
-                });
-              });
-            }
-          });
-        },
-        selectRol(){
-          let me=this;
-          var url= 'roles';
-          axios.get(url).then(response => {
-              console.log(response);
-              var respuesta = response.data;
-              me.arrayRoles = respuesta.roles;
-              
-          })
-          .catch(function (error) {
-              console.log(error);
-          });
+    mostar(id) {
+      const usuario = this.arrayUsuarios.find(u => u.id === id);
+      if (usuario) {
+        this.id = usuario.id;
+        this.cedula = usuario.cedula;
+        this.nombres = usuario.nombres;
+        this.telefono = usuario.telefono;
+        this.correo = usuario.correo;
+        this.cargo = usuario.cargo;
+        this.id_rol = usuario.id_rol;
+        this.respuesta1 = usuario.respuesta1;
+        this.respuesta2 = usuario.respuesta2;
+        this.respuesta3 = usuario.respuesta3;
+        
+        // Limpiar los campos de clave por si acaso
+        this.clave = '';
+        this.confirmar_clave = '';
+      }
+    },
+    editarUsuario() {
+      const camposRequeridos = {
+        cedula: 'El campo "Cédula" es requerido',
+        nombres: 'El campo "Nombres" es requerido',
+        telefono: 'El campo "Teléfono" es requerido',
+        id_rol: 'El campo "Rol" es requerido',
+        cargo: 'El campo "Cargo" es requerido',
+        correo: 'El campo "Correo" es requerido',
+        respuesta1: 'El campo "¿En qué ciudad naciste?" es requerido',
+        respuesta2: 'El campo "¿Cuál es tu comida favorita?" es requerido',
+        respuesta3: 'El campo "¿En qué mes naciste?" es requerido'
+      };
+
+      this.msg = '';
+      for (const campo in camposRequeridos) {
+        if (!this[campo]) {
+          this.msg = camposRequeridos[campo];
+          break;
+        }
+      }
+
+      if (this.msg) {
+        this.mostrarError(this.msg);
+        return;
+      }
+
+      // Validar que las contraseñas coincidan
+      if (this.clave !== this.confirmar_clave) {
+        this.mostrarError('Las contraseñas no coinciden');
+        return;
+      }
+
+      axios.post('Eusuario', {
+        id: this.id,
+        cedula: String(this.cedula),
+        nombres: this.nombres,
+        telefono: String(this.telefono),
+        id_rol: this.id_rol,
+        cargo: this.cargo,
+        correo: this.correo,
+        clave: this.clave,
+        confirmar_clave: this.confirmar_clave,
+        respuesta1: this.respuesta1,
+        respuesta2: this.respuesta2,
+        respuesta3: this.respuesta3
+      }).then(response => {
+        this.mostrarExito("Usuario registrado correctamente.");
+        this.ListarUsuarios(1, this.buscar);
+      }).catch(error => {
+        if (error.response && error.response.status === 422) {
+          // Laravel devolvió errores de validación
+          const errores = error.response.data.errors;
+          const primerCampo = Object.keys(errores)[0];
+          this.mostrarError(errores[primerCampo][0]);
+        } else {
+          this.mostrarError(error.message || "Ocurrió un error al registrar el usuario.");
+        }
+      });
+  },
+
+
+
+
+   
+    mostrarError(mensaje) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: mensaje,
+        didOpen: () => {
+          const swalContainer = document.querySelector('.swal2-container');
+          if (swalContainer) {
+            swalContainer.style.zIndex = '9999';
+          }
+        }
+      });
+    },
+    mostrarExito(mensaje) {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: mensaje,
+        showConfirmButton: false,
+        timer: 1500,
+        didOpen: () => {
+          const swalContainer = document.querySelector('.swal2-container');
+          if (swalContainer) {
+            swalContainer.style.zIndex = '9999';
+          }
+        }
+      });
+    },
+    validarCampos() {
+        if (
+          !this.nombres ||
+          !this.cedula ||
+          !this.telefono ||
+          !this.correo ||
+          !this.cargo ||
+          !this.id_rol ||
+          !this.respuesta1 ||
+          !this.respuesta2 ||
+          !this.respuesta3
+        ) {
+          alert("Por favor complete todos los campos obligatorios.");
+          return false;
+        }
+        return true;
       },
-     }
+
+    limpiarFormulario() {
+      this.id = '';
+      this.cedula = '';
+      this.nombres = '';
+      this.telefono = '';
+      this.id_rol = '';
+      this.cargo = '';
+      this.correo = '';
+      this.clave = '';
+      this.respuesta1 = '';
+      this.respuesta2 = '';
+      this.respuesta3 = '';
+    },
+    cerrarModal() {
+      const modal = new bootstrap.Modal(document.getElementById('editmodal'));
+      modal.hide();
+    },
+    eliminar(id) {
+      Swal.fire({
+        title: "¿Estas seguro?",
+        text: "¡No podrás revertir esto!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4ed571",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "¡Sí, bórralo!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.get('ELusuario', { params: { id: id } })
+            .then(response => {
+              Swal.fire({
+                title: "¡Eliminado!",
+                text: "El usuario ha sido eliminado.",
+                icon: "success"
+              });
+              this.ListarUsuarios(1, this.buscar);
+            })
+            .catch(error => {
+              console.error(error);
+              Swal.fire({
+                title: "Error!",
+                text: "Ocurrió un error al eliminar el usuario.",
+                icon: "error"
+              });
+            });
+        }
+      });
+    },
+    selectRol() {
+      let me = this;
+      const url = 'roles';
+      axios.get(url)
+        .then(response => {
+          me.arrayRoles = response.data.roles;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }
 }
-  </script>
+</script>

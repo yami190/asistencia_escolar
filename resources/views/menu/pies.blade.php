@@ -12,22 +12,7 @@
       <a href="#" target="_blank" class="footer-link fw-bolder">Elismar Maestre</a>
     </div>
     <div>
-      <a href="#" class="footer-link me-4" target="_blank">License</a>
-      <!-- <a href="#" target="_blank" class="footer-link me-4">More Themes</a> -->
-
-      <a
-        href="#"
-        target="_blank"
-        class="footer-link me-4"
-        >Documentation</a
-      >
-
-      <a
-        href="#"
-        target="_blank"
-        class="footer-link me-4"
-        >Support</a
-      >
+      
     </div>
   </div>
 </footer>
@@ -54,7 +39,7 @@
 <script src="assets/vendor/libs/popper/popper.js"></script>
 <script src="assets/vendor/js/bootstrap.js"></script>
 <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="sweetalert2@11.js"></script>
 <script src="assets/vendor/js/menu.js"></script>
 <!-- endbuild -->
 

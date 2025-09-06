@@ -1,37 +1,37 @@
 <template>
     <div class="container">
         <img class="wave" src="login/img/wave.png">
-	<div class="container">
-		<div class="img">
-			<img src="login/img/bg.svg">
-		</div>
-		<div class="login-content">
-			<form action="#">
-				<img src="login/img/IMG-20240425-WA0010.jpg">
-				<h2 class="title">Bienvenido</h2>
-           		<div class="input-div one">
-           		   <div class="i">
-           		   		<i class="fas fa-user"></i>
-           		   </div>
-           		   <div class="div">
-           		   		<h5>Usuario</h5>
-           		   		<input type="text" v-model="cedula" class="input">
-           		   </div>
-           		</div>
-           		<div class="input-div pass">
-           		   <div class="i"> 
-           		    	<i class="fas fa-lock"></i>
-           		   </div>
-           		   <div class="div">
-           		    	<h5>Contraseña</h5>
-           		    	<input type="password" class="input" v-model="clave" >
-            	   </div>
-            	</div>
-            	<a href="#">Recuperar Contraseña</a>
-            	<input type="submit" class="btn"  @click="entar">
-            </form>
-        </div>
-    </div>
+            <div class="container">
+                <div class="img">
+                    
+                </div>
+                <div class="login-content">
+                    <form action="#">
+                        <img src="login/img/IMG-20240425-WA0010.jpg">
+                        <h2 class="title">Bienvenido</h2>
+                        <div class="input-div one">
+                        <div class="i">
+                                <i class="fas fa-user"></i>
+                        </div>
+                        <div class="div">
+                                <h5>Cedula</h5>
+                                <input type="text" v-model="cedula" class="input">
+                        </div>
+                        </div>
+                        <div class="input-div pass">
+                        <div class="i"> 
+                                <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="div">
+                                <h5>Contraseña</h5>
+                                <input type="password" class="input" v-model="clave" >
+                        </div>
+                        </div>
+                        <a href="Gsuario">Recuperar Contraseña</a>
+                        <input type="submit" class="btn"  @click="entar">
+                    </form>
+                </div>
+            </div>
     </div>
 </template>
 
@@ -81,8 +81,8 @@
                                         case 1:
                                             let timerInterval
                                             Swal.fire({
-                                            title: 'Sus datos han sido validados!',
-                                            text: 'Será direccionado a la pantalla principal.',
+                                            title: 'Bienvenido Usuario',
+                                            text: 'Su cuenta está activada.',
                                             timer: 2000,
                                             icon: 'success',
                                             didOpen: () => {
@@ -193,17 +193,7 @@
                                 // Mostrar errores de validación más específicos si es necesario
                                 console.error(error.response.data);
                                 }
-                            //     if (error.response) {
-                            //     // El servidor respondió con un código de estado de error
-                            //     alert.error(error.response.data);
-                            //     // Mostrar mensaje de error en la vista (e.g., usando Vuetify o Bootstrap)
-                            // } else if (error.request) {
-                            //     // La solicitud fue hecha pero no se recibió ninguna respuesta
-                            //     alert.error(error.request);
-                            // } else {
-                            //     // Algo más ocurrió en la petición
-                            //     alert.error('Error', error.message);
-                            // }
+                          
                     });
 
                 }

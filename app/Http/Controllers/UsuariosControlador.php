@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\Roles;
 
@@ -20,7 +21,7 @@ class UsuariosControlador extends Controller
 
         if($cedula==''){
 
-            $user = User::select('users.id', 'users.nombres', 'users.cedula','users.telefono','users.correo','users.cargo', 'roles.descripcion as rol')
+            $user = User::select('users.id', 'users.nombres', 'users.cedula','users.telefono','users.correo','users.cargo','users.id_rol', 'roles.descripcion as rol', 'users.respuesta1' , 'users.respuesta2', 'users.respuesta3')
             ->join('roles', 'users.id_rol', '=', 'roles.id_rol')
             ->orderBy('users.id', 'DESC')->paginate(10);
 
@@ -28,7 +29,7 @@ class UsuariosControlador extends Controller
 
         else {
 
-            $user = User::select('users.id', 'users.nombres', 'users.cedula','users.telefono','users.correo','users.cargo', 'roles.descripcion as rol')
+            $user = User::select('users.id', 'users.nombres', 'users.cedula','users.telefono','users.correo','users.cargo','users.id_rol', 'roles.descripcion as rol', 'users.respuesta1' , 'users.respuesta2', 'users.respuesta3')
             ->join('roles', 'users.id_rol', '=', 'roles.id_rol')
             ->where('users.cedula', 'like', '%'. $cedula .'%')
             ->orderBy('users.id', 'DESC')->paginate(10);
@@ -57,9 +58,28 @@ class UsuariosControlador extends Controller
         return ['roles' => $roles];
     }
     public function guardarUsuario(Request $request)
-    {    
+    {
+        // Validación del formulario
+        $request->validate([
+            'cedula' => 'required|unique:users,cedula',
+            'nombres' => 'required|string',
+            'id_rol' => 'required|numeric',
+            'cargo' => 'required|string',
+            'telefono' => 'required|string',
+            'correo' => 'required|email|unique:users,correo',
+            'clave' => 'required|min:6|same:confirmar_clave',
+            'confirmar_clave' => 'required|min:6',
+            'respuesta1' => 'required|string',
+            'respuesta2' => 'required|string',
+            'respuesta3' => 'required|string',
+        ], [
+            'clave.same' => 'Las contraseñas no coinciden.',
+            'confirmar_clave.required' => 'Debe confirmar la contraseña.',
+            'cedula.unique' => 'La cédula ya está registrada.',
+            'correo.unique' => 'El correo ya está registrado.',
+        ]);
+    
         try {
-
             $user = new User();
             $user->cedula = $request->cedula;
             $user->nombres = $request->nombres;
@@ -67,17 +87,27 @@ class UsuariosControlador extends Controller
             $user->cargo = $request->cargo;
             $user->telefono = $request->telefono;
             $user->correo = $request->correo;
-            $user->clave = Hash::make($request->clave);
-            
+            $user->respuesta1 = $request->respuesta1;
+            $user->respuesta2 = $request->respuesta2;
+            $user->respuesta3 = $request->respuesta3;
+            $user->clave = Hash::make($request->clave); // Encriptar la clave
             $user->save();
-      
-        return response()->json(['message' => 'El Usuario fue creados con éxito'], 201);
-        } catch (ValidationException $e) {
-            return response()->json(['errors' => $e->validator->errors()], 422);
+    
+            return response()->json(['message' => 'El usuario fue creado con éxito'], 201);
+    
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Esto rara vez se ejecuta porque ya usamos $request->validate(), pero se incluye por seguridad
+            return response()->json(['errors' => $e->errors()], 422);
+    
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al crear la cita: ' . $e->getMessage()], 500);
+            return response()->json([
+                'error' => 'Ocurrió un error al crear el usuario',
+                'detalle' => $e->getMessage()
+            ], 500);
         }
     }
+
+
     public function eliminarUsuario(Request $request)
     {
         $id = $request->query('id'); // Para obtener el parámetro de consulta
@@ -99,34 +129,62 @@ class UsuariosControlador extends Controller
     {
         //return $request;
         $id = $request['id'];
-        $user =User::select('users.id', 'users.nombres', 'users.cedula','users.telefono','users.correo','users.cargo', 'users.id_rol')
+        $user =User::select('users.id', 'users.nombres', 'users.cedula','users.telefono','users.correo','users.cargo', 'users.id_rol', 'users.respuesta1' , 'users.respuesta2', 'users.respuesta3')
         ->where('id', 'like', '%'. $id .'%')->take(1)->get();
         return ['user' => $user];
     }
 
     public function EditarUsuario(Request $request)
-    {
-    
-         // Buscar al usuario
-            $user = User::findOrFail($request->id);
+{
+    $id = $request->id; // 👈 Aquí defines la variable correctamente
 
-            // Actualizar los campos
-            $user->nombres = $request->nombres;
-            $user->cedula = $request->cedula;
-            $user->id_rol = $request->id_rol;
-            $user->cargo = $request->cargo;
-            $user->telefono = $request->telefono;
-            $user->correo = $request->correo;
+    // Validar entrada
+    $validator = Validator::make($request->all(), [
+        'nombres'     => 'required|string|max:255',
+        'cedula'      => 'required|string|max:20|unique:users,cedula,' . $id,
+        'id_rol'      => 'required|exists:roles,id_rol',
+        'cargo'       => 'required|string|max:100',
+        'telefono'    => 'required|string|max:20',
+        'correo'      => 'required|email|max:255|unique:users,correo,' . $id,
+        'respuesta1'  => 'nullable|string|max:255',
+        'respuesta2'  => 'nullable|string|max:255',
+        'respuesta3'  => 'nullable|string|max:255',
+        'clave'       => 'nullable|string|min:6|confirmed',
+    ]);
 
-            // Actualizar la clave solo si se proporciona una nueva
-            if ($request->filled('clave')) {
-                $user->clave = Hash::make($request->clave); // Hashear la nueva clave
-            }
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'errors' => $validator->errors()
+        ], 422);
+    }
 
-            // Guardar los cambios
-            $user->save();
-                
-            }
+    // Buscar usuario
+    $user = User::findOrFail($id);
+
+    // Asignar valores
+    $user->nombres     = $request->nombres;
+    $user->cedula      = $request->cedula;
+    $user->id_rol      = $request->id_rol;
+    $user->cargo       = $request->cargo;
+    $user->telefono    = $request->telefono;
+    $user->correo      = $request->correo;
+    $user->respuesta1  = $request->respuesta1;
+    $user->respuesta2  = $request->respuesta2;
+    $user->respuesta3  = $request->respuesta3;
+
+    if (!empty($request->clave)) {
+        $user->clave = Hash::make($request->clave);
+    }
+
+    $user->save();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Usuario actualizado correctamente'
+    ]);
+}
+
     
     
 

@@ -3,10 +3,10 @@
     <div class="container">
         
         <div class="col-md-12 col-lg-12 mb-12">
-            <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Lista de Asistencia</h5>
-            </div>
+            <div class="card fondo-verde-manzana">
+                <div class="card-body">
+                    <h5 class="card-title">Lista de Asistencia</h5>
+                </div>
             </div>
         </div>
         <br>
@@ -20,10 +20,21 @@
                                     <div class="col-sm-3">
                                         <label for="exampleFormControlSelect1" class="form-label">Matrícula</label>
                                         <select class="form-select" v-model="id_aula" @change="cargarAlumnos" aria-label="Default select example">
-                                            <option v-for="aula in arrayAula" :key="aula.id_aula" :value="aula.id_aula" > {{ aula.nombres }}</option>
+                                            <option v-for="aula in arrayAula" :key="aula.id_aula" :value="aula.id_aula">
+                                                {{ aula.nombres }}
+                                            </option>
                                         </select>
                                     </div>
-                                    
+                                    <div class="col-sm-6"> <label for="exampleFormControlSelect1" class="form-label">Docente:</label> 
+                                        <input 
+                                        type="text"
+                                            id="cedulaEscolar" 
+                                            class="form-control" 
+                                            v-model="docenteSeleccionado"
+                                            disabled 
+                                        />
+                                    </div>
+                                        
                                 </div>
                             </div>
                         </div>
@@ -37,7 +48,7 @@
                 <table class="table">
                 <caption class="ms-4">
                     <template v-if="id_aula > 0">
-                        <button type="button" class="btn rounded-pill btn-success"  @click="enviarAsistencia">Registrar</button>
+                        <button type="button" class="btn rounded-pill btn-success"  @click="enviarAsistencia" v-permiso>Registrar</button>
                     </template>
                     <template v-else>
                         
@@ -52,7 +63,7 @@
                     <th>Apellidos</th>
                     <th>Sexo</th>
                     <th>Aula</th>
-                    <th>Asistencia</th>
+                    <th >Asistencia</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,7 +77,7 @@
                     <td>{{ alumno.aula }}</td>
                     <td>
                         <div class="form-check">
-                            <input class="form-check-input"
+                            <input v-permiso class="form-check-input"
                                 type="checkbox"
                                 v-model="alumno.asistio"
                                 :true-value="true"
@@ -94,6 +105,7 @@
               isLoad: false,
               id_aula:'',
               id_alumno:'',
+              docente:'',
               asistio : '',
               arrayAula : [],
           }
@@ -104,6 +116,12 @@
 
               
           },
+          computed: {
+                docenteSeleccionado() {
+                    const aula = this.arrayAula.find(aula => aula.id_aula === this.id_aula);
+                    return aula ? aula.docente : 'N/A';
+                }
+            },
           methods: {
             selectAula (){
                 let me=this;
@@ -159,56 +177,63 @@
                 },
                 
                 enviarAsistencia() {
-                    
-                    // Verificar los datos antes de enviarlos
-                    console.log('Datos de alumnos:', this.arrayAlumnos);
+  console.log('Datos de alumnos:', this.arrayAlumnos);
 
-                    // Preparar los datos para enviar al backend
-                    const asistenciaData = this.arrayAlumnos.map(alumno => ({
-                        id_alumno: alumno.id_alumno,
-                        asistio: alumno.asistio === true, // Forzar a true o false
-                    }));
+  const asistenciaData = this.arrayAlumnos
+    .filter(alumno => alumno.asistio !== undefined)
+    .map(alumno => ({
+      id_alumno: alumno.id_alumno,
+      asistio: alumno.asistio === true,
+    }));
 
-                    // Verificar los datos preparados
-                    console.log('Datos de asistencia a enviar:', asistenciaData);
-                    Swal.fire({
-                    title: "¿Quieres guardar los cambios?",
-                    showDenyButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: "Si",
-                    denyButtonText: `No`
-                    }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        axios.post('Gasistencia', { asistencia: asistenciaData })
-                            .then(response => {
-                                //this.id_aula = '';
-                                this.cargarAlumnos();
-                                //this.asistio = '';
-                            console.log('Respuesta del backend:', response.data);
-                            Swal.fire("Guardado!", "", "success");
-                            })
-                            
-                            .catch(error => {
-                            console.error('Error al enviar la asistencia:', error);
-                            Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Ocurrió un error al guardar la asistencia.",
-                            //footer: '<a href="#">Why do I have this issue?</a>'
-                            });
-                            //alert('Ocurrió un error al guardar la asistencia.');
-                            });
-                        
-                    } else if (result.isDenied) {
-                        Swal.fire("Los cambios no se guardan", "", "info");
-                    }
-                    });
-                    // Enviar los datos al backend usando POST
-                    
-                    },
+  console.log('Datos de asistencia a enviar:', asistenciaData);
+
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Se enviará la asistencia registrada.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#4ed571",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, guardar",
+    cancelButtonText: "Cancelar"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios.post('Gasistencia', { asistencia: asistenciaData })
+        .then(response => {
+          this.cargarAlumnos();
+          Swal.fire({
+            title: "Guardado!",
+            text: "La asistencia fue registrada exitosamente.",
+            icon: "success"
+          });
+        })
+        .catch(error => {
+          console.error('Error al enviar la asistencia:', error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Ocurrió un error al guardar la asistencia.",
+          });
+        });
+    } else {
+      Swal.fire({
+        title: "Cancelado",
+        text: "Los cambios no fueron guardados.",
+        icon: "info"
+      });
+    }
+  });
+}
+
+
             
        }
        
   }
     </script>
+    <style>
+    .fondo-verde-manzana {
+        background-color: #e3f8d7 !important;
+    }
+    </style>
